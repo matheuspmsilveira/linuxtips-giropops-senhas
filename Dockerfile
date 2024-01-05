@@ -1,14 +1,12 @@
-FROM cgr.dev/chainguard/python:latest-dev as builder
+FROM python:3.11.6-alpine3.18
+
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --user -r requirements.txt
-
-FROM cgr.dev/chainguard/python:latest
-WORKDIR /app
-COPY --from=builder /home/nonroot/.local/lib/python3.11/site-packages /home/nonroot/.local/lib/python3.11/site-packages
 COPY app.py .
 COPY templates templates/
 COPY static static/
+
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
